@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="X-Frame-Options" content="DENY">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'unsafe-inline';">
+<title>ERP System</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --surface2: #f0efe9;
+    --border: #e2e0d8;
+    --text: #1a1916;
+    --text2: #6b6960;
+    --text3: #a09e96;
+    --accent: #1a1916;
+    --accent-hover: #2d2b26;
+    --red: #c0392b;
+    --green: #27ae60;
+    --blue: #2471a3;
+    --amber: #d4850a;
+    --purple: #7d3c98;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.10);
+  }
+
+  html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); }
+
+  /* ── SECURITY: no text select on sensitive areas ── */
+  .no-select { user-select: none; -webkit-user-select: none; }
+
+  /* ══════════════════════════════════════════════════
+     LOGIN PAGE
+  ══════════════════════════════════════════════════ */
+  #login-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .login-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 28px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .nav-brand { font-size: 17px; font-weight: 600; letter-spacing: -0.3px; }
+
+  .nav-menu-btn {
+    width: 42px; height: 42px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    gap: 0; flex-direction: column;
+    transition: background 0.15s;
+  }
+  .nav-menu-btn:hover { background: var(--surface2); }
+  .nav-menu-btn span {
+    display: block; width: 16px; height: 1.5px;
+    background: var(--text); margin: 2px 0; border-radius: 2px;
+  }
+
+  .login-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  .login-logo {
+    width: 64px; height: 64px;
+    background: var(--accent);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+  }
+  .login-logo span {
+    color: #fff;
+    font-size: 26px;
+    font-weight: 600;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .login-title {
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    margin-bottom: 28px;
+  }
+
+  .login-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 28px 32px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: var(--shadow);
+  }
+
+  .input-group { margin-bottom: 14px; position: relative; }
+
+  .input-icon {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    color: var(--text3); pointer-events: none;
+  }
+  .input-icon svg { display: block; }
+
+  .form-input {
+    width: 100%; height: 52px;
+    padding: 0 16px 0 44px;
+    background: var(--surface2);
+    border: 1.5px solid transparent;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    -webkit-autocomplete: none;
+  }
+  .form-input:focus {
+    border-color: var(--accent);
+    background: var(--surface);
+  }
+  .form-input::placeholder { color: var(--text3); }
+
+  .pw-group { position: relative; }
+  .pw-show {
+    position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer;
+    font-size: 13px; font-weight: 500; color: var(--text2);
+    font-family: 'DM Sans', sans-serif;
+    padding: 4px;
+  }
+  .pw-show:hover { color: var(--text); }
+
+  .forgot-link {
+    text-align: right; margin-bottom: 20px;
+    font-size: 14px; color: var(--text2);
+    cursor: pointer; text-decoration: none;
+    display: block;
+  }
+  .forgot-link:hover { color: var(--text); }
+
+  .login-btn {
+    width: 100%; height: 52px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    letter-spacing: 0.2px;
+    transition: background 0.15s, transform 0.1s;
+    position: relative; overflow: hidden;
+  }
+  .login-btn:hover { background: var(--accent-hover); }
+  .login-btn:active { transform: scale(0.99); }
+  .login-btn.loading { pointer-events: none; }
+  .login-btn .btn-spinner {
+    display: none;
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+  }
+  .login-btn.loading .btn-text { opacity: 0; }
+  .login-btn.loading .btn-spinner { display: block; }
+
+  .signup-text {
+    text-align: center; margin-top: 20px;
+    font-size: 14px; color: var(--text2);
+  }
+  .signup-text a { color: var(--text); font-weight: 500; text-decoration: none; cursor: pointer; }
+  .signup-text a:hover { text-decoration: underline; }
+
+  .error-msg {
+    background: #fff0ef; border: 1px solid #f5c0bc;
+    color: var(--red); border-radius: 8px;
+    padding: 10px 14px; font-size: 13.5px;
+    margin-bottom: 14px; display: none;
+  }
+
+  /* ══════════════════════════════════════════════════
+     DASHBOARD
+  ══════════════════════════════════════════════════ */
+  #dashboard-page { display: none; min-height: 100vh; }
+
+  /* Sidebar */
+  .sidebar {
+    position: fixed; left: 0; top: 0; bottom: 0;
+    width: 240px;
+    background: var(--accent);
+    display: flex; flex-direction: column;
+    z-index: 100;
+    transition: transform 0.25s;
+  }
+
+  .sidebar-logo {
+    padding: 22px 20px 18px;
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .sidebar-logo-box {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 600; color: #fff; font-size: 15px;
+    font-family: 'DM Mono', monospace;
+  }
+  .sidebar-logo-text { color: #fff; font-size: 15px; font-weight: 600; }
+
+  .sidebar-nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
+
+  .nav-section-title {
+    font-size: 10px; font-weight: 500; letter-spacing: 1.2px;
+    color: rgba(255,255,255,0.4); text-transform: uppercase;
+    padding: 0 8px; margin: 16px 0 6px;
+  }
+  .nav-section-title:first-child { margin-top: 0; }
+
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: rgba(255,255,255,0.65);
+    font-size: 14px; font-weight: 400;
+    transition: background 0.15s, color 0.15s;
+    margin-bottom: 2px;
+    text-decoration: none;
+    user-select: none;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .nav-item.active { background: rgba(255,255,255,0.18); color: #fff; font-weight: 500; }
+  .nav-item svg { flex-shrink: 0; opacity: 0.8; }
+  .nav-item.active svg { opacity: 1; }
+
+  .sidebar-footer {
+    padding: 16px 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .user-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px; border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .user-row:hover { background: rgba(255,255,255,0.1); }
+  .user-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; color: #fff;
+    flex-shrink: 0;
+  }
+  .user-info { flex: 1; min-width: 0; }
+  .user-name { font-size: 13px; font-weight: 500; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .user-role { font-size: 11px; color: rgba(255,255,255,0.5); }
+  .logout-btn {
+    background: none; border: none; cursor: pointer;
+    color: rgba(255,255,255,0.5); padding: 4px;
+    transition: color 0.15s; border-radius: 4px;
+    display: flex; align-items: center;
+  }
+  .logout-btn:hover { color: #fff; }
+
+  /* Main content */
+  .main {
+    margin-left: 240px;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+  }
+
+  .topbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 28px;
+    height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 50;
+  }
+
+  .topbar-title {
+    font-size: 17px; font-weight: 600; letter-spacing: -0.3px;
+  }
+
+  .topbar-right { display: flex; align-items: center; gap: 12px; }
+
+  .topbar-badge {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 12px; font-weight: 500;
+    color: var(--text2);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+
+  /* Content area */
+  .content { padding: 28px; flex: 1; }
+
+  /* Overview cards */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    position: relative; overflow: hidden;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+  .stat-card.so::before { background: var(--blue); }
+  .stat-card.po::before { background: var(--green); }
+  .stat-card.inv::before { background: var(--amber); }
+  .stat-card.md::before { background: var(--purple); }
+  .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: #d0cdc5; }
+
+  .stat-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px;
+  }
+  .stat-card.so .stat-icon { background: #eaf2fb; color: var(--blue); }
+  .stat-card.po .stat-icon { background: #eafbf0; color: var(--green); }
+  .stat-card.inv .stat-icon { background: #fdf5e8; color: var(--amber); }
+  .stat-card.md .stat-icon { background: #f3eafa; color: var(--purple); }
+
+  .stat-label { font-size: 12px; color: var(--text2); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .stat-value { font-size: 28px; font-weight: 600; letter-spacing: -0.5px; font-family: 'DM Mono', monospace; }
+  .stat-sub { font-size: 12px; color: var(--text3); margin-top: 4px; }
+  .stat-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 500; padding: 2px 8px;
+    border-radius: 20px; margin-top: 8px;
+  }
+  .stat-badge.up { background: #eafbf0; color: #1e8449; }
+  .stat-badge.down { background: #fff0ef; color: #c0392b; }
+
+  /* Module panels */
+  .module-panel { display: none; }
+  .module-panel.active { display: block; }
+
+  .panel-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .panel-title { font-size: 20px; font-weight: 600; letter-spacing: -0.4px; }
+  .panel-actions { display: flex; gap: 10px; }
+
+  .btn {
+    height: 36px; padding: 0 16px;
+    border-radius: 8px; font-size: 13.5px; font-weight: 500;
+    font-family: 'DM Sans', sans-serif; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 7px;
+    transition: all 0.15s; border: 1px solid transparent;
+  }
+  .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-primary:hover { background: var(--accent-hover); }
+  .btn-outline { background: var(--surface); color: var(--text); border-color: var(--border); }
+  .btn-outline:hover { background: var(--surface2); }
+
+  /* Table */
+  .table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+
+  .table-toolbar {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .search-input {
+    height: 34px; padding: 0 12px 0 34px;
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--surface2); font-size: 13.5px;
+    font-family: 'DM Sans', sans-serif; color: var(--text);
+    outline: none; width: 220px;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+  .search-input:focus { border-color: var(--accent); background: var(--surface); }
+  .search-wrap { position: relative; }
+  .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text3); pointer-events: none; }
+
+  .filter-select {
+    height: 34px; padding: 0 10px;
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--surface2); font-size: 13px;
+    font-family: 'DM Sans', sans-serif; color: var(--text);
+    outline: none; cursor: pointer;
+  }
+
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    text-align: left; padding: 11px 18px;
+    font-size: 11.5px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.6px; color: var(--text2);
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+    cursor: pointer;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #fafaf7; }
+  tbody td { padding: 12px 18px; font-size: 14px; color: var(--text); }
+
+  .tag {
+    display: inline-flex; align-items: center;
+    padding: 3px 9px; border-radius: 20px; font-size: 12px; font-weight: 500;
+  }
+  .tag-green { background: #eafbf0; color: #1a7a3a; }
+  .tag-blue  { background: #eaf2fb; color: #1a5a8a; }
+  .tag-amber { background: #fdf5e8; color: #8a5a0a; }
+  .tag-red   { background: #fff0ef; color: #9a2a1a; }
+  .tag-gray  { background: var(--surface2); color: var(--text2); }
+
+  .amount { font-family: 'DM Mono', monospace; font-size: 13.5px; }
+
+  /* Overview home */
+  #home-panel { display: block; }
+
+  .welcome-bar {
+    background: var(--accent);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin-bottom: 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    overflow: hidden; position: relative;
+  }
+  .welcome-bar::after {
+    content: 'ERP';
+    position: absolute; right: 28px; top: 50%; transform: translateY(-50%);
+    font-size: 80px; font-weight: 700; color: rgba(255,255,255,0.06);
+    font-family: 'DM Mono', monospace; pointer-events: none;
+  }
+  .welcome-text h2 { color: #fff; font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+  .welcome-text p { color: rgba(255,255,255,0.6); font-size: 14px; }
+  .welcome-date { color: rgba(255,255,255,0.5); font-size: 13px; font-family: 'DM Mono', monospace; }
+
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .module-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: var(--shadow);
+    display: flex; gap: 16px;
+  }
+  .module-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
+  .module-icon-wrap {
+    width: 48px; height: 48px; border-radius: 12px;
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  }
+  .module-icon-wrap.blue  { background: #eaf2fb; color: var(--blue); }
+  .module-icon-wrap.green { background: #eafbf0; color: var(--green); }
+  .module-icon-wrap.amber { background: #fdf5e8; color: var(--amber); }
+  .module-icon-wrap.purple{ background: #f3eafa; color: var(--purple); }
+
+  .module-info h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .module-info p { font-size: 13px; color: var(--text2); line-height: 1.5; }
+  .module-count { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text3); margin-top: 6px; }
+
+  /* Inventory grid cards */
+  .inv-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .inv-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .inv-card:hover { transform: translateY(-2px); }
+  .inv-card-name { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .inv-card-sku { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; margin-bottom: 10px; }
+  .inv-bar-bg { height: 4px; background: var(--surface2); border-radius: 4px; margin-bottom: 8px; }
+  .inv-bar { height: 100%; border-radius: 4px; }
+  .inv-footer { display: flex; justify-content: space-between; font-size: 12px; color: var(--text2); }
+
+  /* Master Data */
+  .master-tabs { display: flex; gap: 4px; margin-bottom: 18px; border-bottom: 1px solid var(--border); }
+  .master-tab {
+    padding: 10px 16px; font-size: 14px; font-weight: 500;
+    color: var(--text2); cursor: pointer; border-bottom: 2px solid transparent;
+    transition: color 0.15s; margin-bottom: -1px;
+  }
+  .master-tab.active { color: var(--text); border-bottom-color: var(--accent); }
+  .master-tab:hover:not(.active) { color: var(--text); }
+
+  /* Animations */
+  @keyframes spin { to { transform: translate(-50%,-50%) rotate(360deg); } }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @keyframes slideIn { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: none; } }
+
+  .fade-in { animation: fadeIn 0.3s ease both; }
+  .slide-in { animation: slideIn 0.3s ease both; }
+
+  /* Toast notification */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--accent); color: #fff;
+    padding: 12px 18px; border-radius: 10px;
+    font-size: 14px; font-weight: 500;
+    box-shadow: var(--shadow-lg);
+    display: flex; align-items: center; gap: 10px;
+    z-index: 9999; opacity: 0; transform: translateY(10px);
+    transition: all 0.25s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: none; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: none; }
+    .main { margin-left: 0; }
+  }
+
+  /* Session timeout warning */
+  .session-warn {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #fff3cd; border-bottom: 1px solid #ffc107;
+    padding: 10px 20px;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    font-size: 13.5px; z-index: 9000; display: none;
+  }
+  .session-warn.show { display: flex; }
+
+  /* Security overlay on focus loss */
+  .blur-overlay {
+    position: fixed; inset: 0;
+    background: rgba(15,15,12,0.85);
+    z-index: 99999; display: none;
+    align-items: center; justify-content: center;
+    flex-direction: column; gap: 16px;
+    backdrop-filter: blur(8px);
+  }
+  .blur-overlay.show { display: flex; }
+  .blur-overlay-icon { color: #fff; margin-bottom: 8px; }
+  .blur-overlay h3 { color: #fff; font-size: 20px; font-weight: 600; }
+  .blur-overlay p { color: rgba(255,255,255,0.6); font-size: 14px; }
+  .blur-overlay-btn {
+    margin-top: 8px; padding: 10px 24px;
+    background: #fff; color: var(--accent);
+    border: none; border-radius: 8px;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ LOGIN ══════════════ -->
+<div id="login-page">
+  <nav class="login-nav no-select">
+    <div class="nav-brand">Home</div>
+    <button class="nav-menu-btn" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="login-body">
+    <div class="login-logo"><span>E</span></div>
+    <h1 class="login-title">Login to ERP</h1>
+    <div class="login-card fade-in">
+      <div class="error-msg" id="error-msg">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" style="flex-shrink:0;display:inline-block;vertical-align:-2px;margin-right:6px"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm-.75 3.5a.75.75 0 0 1 1.5 0v3a.75.75 0 0 1-1.5 0v-3zm.75 7a.875.875 0 1 1 0-1.75.875.875 0 0 1 0 1.75z"/></svg>
+        <span id="error-text">Invalid email or password.</span>
+      </div>
+      <div class="input-group">
+        <span class="input-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6L22 7"/></svg>
+        </span>
+        <input type="email" id="email-input" class="form-input" placeholder="jane@example.com" autocomplete="username" maxlength="120">
+      </div>
+      <div class="input-group pw-group">
+        <span class="input-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </span>
+        <input type="password" id="pw-input" class="form-input" placeholder="••••••••" autocomplete="current-password" maxlength="128">
+        <button class="pw-show" id="pw-toggle" type="button" tabindex="-1">Show</button>
+      </div>
+      <a class="forgot-link" href="#" onclick="showToast('Password reset link sent!'); return false;">Forgot Password?</a>
+      <button class="login-btn" id="login-btn" type="button">
+        <span class="btn-text">Login</span>
+        <div class="btn-spinner"></div>
+      </button>
+    </div>
+    <p class="signup-text">Don't have an account? <a href="#" onclick="showToast('Contact your administrator to create an account.'); return false;">Sign up</a></p>
+  </div>
+</div>
+
+<!-- ══════════════ DASHBOARD ══════════════ -->
+<div id="dashboard-page">
+
+  <!-- Session timeout warning -->
+  <div class="session-warn" id="session-warn">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="#856404"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm-.75 3.5a.75.75 0 0 1 1.5 0v3a.75.75 0 0 1-1.5 0v-3zm.75 7a.875.875 0 1 1 0-1.75.875.875 0 0 1 0 1.75z"/></svg>
+    Session expires in <strong id="session-countdown">5:00</strong> —
+    <button onclick="resetSession()" style="background:none;border:none;color:#856404;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">Stay logged in</button>
+  </div>
+
+  <!-- Sidebar -->
+  <nav class="sidebar no-select" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-box">E</div>
+      <span class="sidebar-logo-text">ERP System</span>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-section-title">Overview</div>
+      <a class="nav-item active" data-panel="home" onclick="switchPanel('home', this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Dashboard
+      </a>
+      <div class="nav-section-title">Modules</div>
+      <a class="nav-item" data-panel="so" onclick="switchPanel('so', this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Sales Orders
+      </a>
+      <a class="nav-item" data-panel="po" onclick="switchPanel('po', this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        Purchase Orders
+      </a>
+      <a class="nav-item" data-panel="inv" onclick="switchPanel('inv', this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        Inventory
+      </a>
+      <a class="nav-item" data-panel="md" onclick="switchPanel('md', this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+        Master Data
+      </a>
+      <div class="nav-section-title">System</div>
+      <a class="nav-item" onclick="showToast('Settings panel coming soon.')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </a>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-row">
+        <div class="user-avatar" id="user-avatar">JD</div>
+        <div class="user-info">
+          <div class="user-name" id="user-name-display">Jane Doe</div>
+          <div class="user-role">Administrator</div>
+        </div>
+        <button class="logout-btn" onclick="logout()" title="Logout" aria-label="Logout">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title" id="topbar-title">Dashboard</span>
+      <div class="topbar-right">
+        <div class="topbar-badge"><div class="status-dot"></div> Live</div>
+        <div class="topbar-badge" id="topbar-time">--:--</div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ── HOME ── -->
+      <div id="home-panel" class="module-panel active fade-in">
+        <div class="welcome-bar">
+          <div class="welcome-text">
+            <h2 id="welcome-msg">Good morning, Jane 👋</h2>
+            <p>Here's what's happening in your business today.</p>
+          </div>
+          <div class="welcome-date" id="today-date">--</div>
+        </div>
+        <div class="overview-grid">
+          <div class="stat-card so" onclick="switchPanel('so', document.querySelector('[data-panel=so]'))">
+            <div class="stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+            <div class="stat-label">Sales Orders</div>
+            <div class="stat-value">128</div>
+            <div class="stat-sub">This month</div>
+            <div class="stat-badge up">↑ 12% vs last month</div>
+          </div>
+          <div class="stat-card po" onclick="switchPanel('po', document.querySelector('[data-panel=po]'))">
+            <div class="stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+            <div class="stat-label">Purchase Orders</div>
+            <div class="stat-value">47</div>
+            <div class="stat-sub">This month</div>
+            <div class="stat-badge up">↑ 5% vs last month</div>
+          </div>
+          <div class="stat-card inv" onclick="switchPanel('inv', document.querySelector('[data-panel=inv]'))">
+            <div class="stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+            <div class="stat-label">Inventory Items</div>
+            <div class="stat-value">362</div>
+            <div class="stat-sub">Across all warehouses</div>
+            <div class="stat-badge down">↓ 3 low stock alerts</div>
+          </div>
+          <div class="stat-card md" onclick="switchPanel('md', document.querySelector('[data-panel=md]'))">
+            <div class="stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
+            <div class="stat-label">Master Records</div>
+            <div class="stat-value">1,204</div>
+            <div class="stat-sub">Customers, vendors, items</div>
+            <div class="stat-badge up">↑ 8 new this week</div>
+          </div>
+        </div>
+        <div class="modules-grid">
+          <div class="module-card" onclick="switchPanel('so', document.querySelector('[data-panel=so]'))">
+            <div class="module-icon-wrap blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+            <div class="module-info">
+              <h3>Sales Orders</h3>
+              <p>Manage customer orders, track fulfillment status and delivery.</p>
+              <div class="module-count">128 active orders</div>
+            </div>
+          </div>
+          <div class="module-card" onclick="switchPanel('po', document.querySelector('[data-panel=po]'))">
+            <div class="module-icon-wrap green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+            <div class="module-info">
+              <h3>Purchase Orders</h3>
+              <p>Track supplier orders, receipts and procurement workflows.</p>
+              <div class="module-count">47 orders this month</div>
+            </div>
+          </div>
+          <div class="module-card" onclick="switchPanel('inv', document.querySelector('[data-panel=inv]'))">
+            <div class="module-icon-wrap amber"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+            <div class="module-info">
+              <h3>Inventory</h3>
+              <p>Monitor stock levels, warehouses and item movements.</p>
+              <div class="module-count">362 items tracked</div>
+            </div>
+          </div>
+          <div class="module-card" onclick="switchPanel('md', document.querySelector('[data-panel=md]'))">
+            <div class="module-icon-wrap purple"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
+            <div class="module-info">
+              <h3>Master Data</h3>
+              <p>Customers, vendors, items, warehouses and chart of accounts.</p>
+              <div class="module-count">1,204 records</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SALES ORDERS ── -->
+      <div id="so-panel" class="module-panel fade-in">
+        <div class="panel-header">
+          <div class="panel-title">Sales Orders</div>
+          <div class="panel-actions">
+            <button class="btn btn-outline" onclick="showToast('Exporting data…')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export
+            </button>
+            <button class="btn btn-primary" onclick="showToast('New Sales Order form opening…')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              New Order
+            </button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <div class="table-toolbar">
+            <div class="search-wrap">
+              <svg class="search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" class="search-input" placeholder="Search orders…" oninput="filterTable('so-table', this.value)">
+            </div>
+            <select class="filter-select">
+              <option>All Statuses</option>
+              <option>Confirmed</option>
+              <option>Pending</option>
+              <option>Shipped</option>
+              <option>Cancelled</option>
+            </select>
+          </div>
+          <table id="so-table">
+            <thead>
+              <tr>
+                <th>Order #</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Items</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr onclick="showToast('Opening SO-2026-001…')"><td><strong>SO-2026-001</strong></td><td>Tata Enterprises</td><td>2026-05-28</td><td>12</td><td class="amount">₹2,40,000</td><td><span class="tag tag-green">Confirmed</span></td></tr>
+              <tr onclick="showToast('Opening SO-2026-002…')"><td><strong>SO-2026-002</strong></td><td>Reliance Retail</td><td>2026-05-27</td><td>5</td><td class="amount">₹85,500</td><td><span class="tag tag-amber">Pending</span></td></tr>
+              <tr onclick="showToast('Opening SO-2026-003…')"><td><strong>SO-2026-003</strong></td><td>Infosys Ltd.</td><td>2026-05-26</td><td>8</td><td class="amount">₹1,12,000</td><td><span class="tag tag-blue">Shipped</span></td></tr>
+              <tr onclick="showToast('Opening SO-2026-004…')"><td><strong>SO-2026-004</strong></td><td>Wipro Systems</td><td>2026-05-25</td><td>3</td><td class="amount">₹34,200</td><td><span class="tag tag-green">Confirmed</span></td></tr>
+              <tr onclick="showToast('Opening SO-2026-005…')"><td><strong>SO-2026-005</strong></td><td>Mahindra Corp.</td><td>2026-05-24</td><td>20</td><td class="amount">₹5,60,000</td><td><span class="tag tag-blue">Shipped</span></td></tr>
+              <tr onclick="showToast('Opening SO-2026-006…')"><td><strong>SO-2026-006</strong></td><td>Bajaj Finance</td><td>2026-05-23</td><td>2</td><td class="amount">₹18,000</td><td><span class="tag tag-red">Cancelled</span></td></tr>
+              <tr onclick="showToast('Opening SO-2026-007…')"><td><strong>SO-2026-007</strong></td><td>HDFC Bank</td><td>2026-05-22</td><td>7</td><td class="amount">₹96,400</td><td><span class="tag tag-green">Confirmed</span></td></tr>
+              <tr onclick="showToast('Opening SO-2026-008…')"><td><strong>SO-2026-008</strong></td><td>Sun Pharma</td><td>2026-05-21</td><td>15</td><td class="amount">₹3,20,000</td><td><span class="tag tag-amber">Pending</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── PURCHASE ORDERS ── -->
+      <div id="po-panel" class="module-panel fade-in">
+        <div class="panel-header">
+          <div class="panel-title">Purchase Orders</div>
+          <div class="panel-actions">
+            <button class="btn btn-outline" onclick="showToast('Exporting data…')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export
+            </button>
+            <button class="btn btn-primary" onclick="showToast('New Purchase Order form opening…')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              New PO
+            </button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <div class="table-toolbar">
+            <div class="search-wrap">
+              <svg class="search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" class="search-input" placeholder="Search POs…" oninput="filterTable('po-table', this.value)">
+            </div>
+            <select class="filter-select">
+              <option>All Statuses</option>
+              <option>Ordered</option>
+              <option>Received</option>
+              <option>Pending</option>
+            </select>
+          </div>
+          <table id="po-table">
+            <thead>
+              <tr>
+                <th>PO #</th>
+                <th>Vendor</th>
+                <th>Date</th>
+                <th>Items</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr onclick="showToast('Opening PO-2026-001…')"><td><strong>PO-2026-001</strong></td><td>Godrej Industries</td><td>2026-05-29</td><td>6</td><td class="amount">₹1,80,000</td><td><span class="tag tag-amber">Ordered</span></td></tr>
+              <tr onclick="showToast('Opening PO-2026-002…')"><td><strong>PO-2026-002</strong></td><td>Asian Paints</td><td>2026-05-27</td><td>10</td><td class="amount">₹3,45,000</td><td><span class="tag tag-green">Received</span></td></tr>
+              <tr onclick="showToast('Opening PO-2026-003…')"><td><strong>PO-2026-003</strong></td><td>Larsen & Toubro</td><td>2026-05-25</td><td>4</td><td class="amount">₹92,000</td><td><span class="tag tag-amber">Ordered</span></td></tr>
+              <tr onclick="showToast('Opening PO-2026-004…')"><td><strong>PO-2026-004</strong></td><td>ITC Limited</td><td>2026-05-24</td><td>18</td><td class="amount">₹6,20,000</td><td><span class="tag tag-green">Received</span></td></tr>
+              <tr onclick="showToast('Opening PO-2026-005…')"><td><strong>PO-2026-005</strong></td><td>Ultratech Cement</td><td>2026-05-22</td><td>2</td><td class="amount">₹28,500</td><td><span class="tag tag-gray">Pending</span></td></tr>
+              <tr onclick="showToast('Opening PO-2026-006…')"><td><strong>PO-2026-006</strong></td><td>Bharat Forge</td><td>2026-05-20</td><td>9</td><td class="amount">₹2,10,000</td><td><span class="tag tag-green">Received</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── INVENTORY ── -->
+      <div id="inv-panel" class="module-panel fade-in">
+        <div class="panel-header">
+          <div class="panel-title">Inventory</div>
+          <div class="panel-actions">
+            <button class="btn btn-outline" onclick="showToast('Generating stock report…')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Report
+            </button>
+            <button class="btn btn-primary" onclick="showToast('New item form opening…')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Item
+            </button>
+          </div>
+        </div>
+        <div class="inv-grid">
+          <div class="inv-card" onclick="showToast('Opening ITM-001 details…')">
+            <div class="inv-card-name">Steel Rod 16mm</div>
+            <div class="inv-card-sku">SKU: ITM-001</div>
+            <div class="inv-bar-bg"><div class="inv-bar" style="width:72%;background:var(--green)"></div></div>
+            <div class="inv-footer"><span>720 units</span><span class="tag tag-green" style="padding:2px 6px;font-size:11px">In Stock</span></div>
+          </div>
+          <div class="inv-card" onclick="showToast('Opening ITM-002 details…')">
+            <div class="inv-card-name">Cement Bag 50kg</div>
+            <div class="inv-card-sku">SKU: ITM-002</div>
+            <div class="inv-bar-bg"><div class="inv-bar" style="width:18%;background:var(--red)"></div></div>
+            <div class="inv-footer"><span>42 bags</span><span class="tag tag-red" style="padding:2px 6px;font-size:11px">Low Stock</span></div>
+          </div>
+          <div class="inv-card" onclick="showToast('Opening ITM-003 details…')">
+            <div class="inv-card-name">Copper Wire 2.5mm</div>
+            <div class="inv-card-sku">SKU: ITM-003</div>
+            <div class="inv-bar-bg"><div class="inv-bar" style="width:55%;background:var(--amber)"></div></div>
+            <div class="inv-footer"><span>1,100 m</span><span class="tag tag-amber" style="padding:2px 6px;font-size:11px">Medium</span></div>
+          </div>
+          <div class="inv-card" onclick="showToast('Opening ITM-004 details…')">
+            <div class="inv-card-name">PVC Pipe 4in</div>
+            <div class="inv-card-sku">SKU: ITM-004</div>
+            <div class="inv-bar-bg"><div class="inv-bar" style="width:88%;background:var(--green)"></div></div>
+            <div class="inv-footer"><span>880 pcs</span><span class="tag tag-green" style="padding:2px 6px;font-size:11px">In Stock</span></div>
+          </div>
+          <div class="inv-card" onclick="showToast('Opening ITM-005 details…')">
+            <div class="inv-card-name">Aluminium Sheet</div>
+            <div class="inv-card-sku">SKU: ITM-005</div>
+            <div class="inv-bar-bg"><div class="inv-bar" style="width:12%;background:var(--red)"></div></div>
+            <div class="inv-footer"><span>24 sheets</span><span class="tag tag-red" style="padding:2px 6px;font-size:11px">Low Stock</span></div>
+          </div>
+          <div class="inv-card" onclick="showToast('Opening ITM-006 details…')">
+            <div class="inv-card-name">Bolt M10 Hex</div>
+            <div class="inv-card-sku">SKU: ITM-006</div>
+            <div class="inv-bar-bg"><div class="inv-bar" style="width:96%;background:var(--green)"></div></div>
+            <div class="inv-footer"><span>9,600 pcs</span><span class="tag tag-green" style="padding:2px 6px;font-size:11px">In Stock</span></div>
+          </div>
+          <div class="inv-card" onclick="showToast('Opening ITM-007 details…')">
+            <div class="inv-card-name">Safety Helmet</div>
+            <div class="inv-card-sku">SKU: ITM-007</div>
+            <div class="inv-bar-bg"><div class="inv-bar" style="width:40%;background:var(--amber)"></div></div>
+            <div class="inv-footer"><span>160 units</span><span class="tag tag-amber" style="padding:2px 6px;font-size:11px">Medium</span></div>
+          </div>
+          <div class="inv-card" onclick="showToast('Opening ITM-008 details…')">
+            <div class="inv-card-name">Diesel Fuel (L)</div>
+            <div class="inv-card-sku">SKU: ITM-008</div>
+            <div class="inv-bar-bg"><div class="inv-bar" style="width:65%;background:var(--blue)"></div></div>
+            <div class="inv-footer"><span>6,500 L</span><span class="tag tag-blue" style="padding:2px 6px;font-size:11px">Adequate</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MASTER DATA ── -->
+      <div id="md-panel" class="module-panel fade-in">
+        <div class="panel-header">
+          <div class="panel-title">Master Data</div>
+          <div class="panel-actions">
+            <button class="btn btn-primary" onclick="showToast('New record form opening…')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              New Record
+            </button>
+          </div>
+        </div>
+        <div class="master-tabs">
+          <div class="master-tab active" onclick="switchMasterTab('customers', this)">Customers</div>
+          <div class="master-tab" onclick="switchMasterTab('vendors', this)">Vendors</div>
+          <div class="master-tab" onclick="switchMasterTab('items', this)">Items</div>
+          <div class="master-tab" onclick="switchMasterTab('warehouses', this)">Warehouses</div>
+        </div>
+        <div id="md-customers" class="table-wrap">
+          <div class="table-toolbar">
+            <div class="search-wrap">
+              <svg class="search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" class="search-input" placeholder="Search customers…">
+            </div>
+          </div>
+          <table>
+            <thead><tr><th>Customer ID</th><th>Name</th><th>GST No.</th><th>City</th><th>Credit Limit</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr onclick="showToast('Opening customer profile…')"><td>CUST-0001</td><td>Tata Enterprises</td><td>27AABCT1234F1Z5</td><td>Mumbai</td><td class="amount">₹50,00,000</td><td><span class="tag tag-green">Active</span></td></tr>
+              <tr onclick="showToast('Opening customer profile…')"><td>CUST-0002</td><td>Reliance Retail</td><td>27AAACR5055K1ZJ</td><td>Navi Mumbai</td><td class="amount">₹1,00,00,000</td><td><span class="tag tag-green">Active</span></td></tr>
+              <tr onclick="showToast('Opening customer profile…')"><td>CUST-0003</td><td>Infosys Ltd.</td><td>29AABCI1234F1Z2</td><td>Bengaluru</td><td class="amount">₹75,00,000</td><td><span class="tag tag-green">Active</span></td></tr>
+              <tr onclick="showToast('Opening customer profile…')"><td>CUST-0004</td><td>Wipro Systems</td><td>29AABCW1234F1Z1</td><td>Bengaluru</td><td class="amount">₹30,00,000</td><td><span class="tag tag-amber">On Hold</span></td></tr>
+              <tr onclick="showToast('Opening customer profile…')"><td>CUST-0005</td><td>Bajaj Finance</td><td>27AABCB1234F1Z9</td><td>Pune</td><td class="amount">₹20,00,000</td><td><span class="tag tag-green">Active</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="md-vendors" class="table-wrap" style="display:none">
+          <div class="table-toolbar">
+            <div class="search-wrap">
+              <svg class="search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" class="search-input" placeholder="Search vendors…">
+            </div>
+          </div>
+          <table>
+            <thead><tr><th>Vendor ID</th><th>Name</th><th>GST No.</th><th>City</th><th>Payment Terms</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr onclick="showToast('Opening vendor profile…')"><td>VEND-0001</td><td>Godrej Industries</td><td>27AABCG1234F1Z7</td><td>Mumbai</td><td>Net 30</td><td><span class="tag tag-green">Active</span></td></tr>
+              <tr onclick="showToast('Opening vendor profile…')"><td>VEND-0002</td><td>Asian Paints</td><td>27AABCA1234F1Z6</td><td>Mumbai</td><td>Net 45</td><td><span class="tag tag-green">Active</span></td></tr>
+              <tr onclick="showToast('Opening vendor profile…')"><td>VEND-0003</td><td>Larsen & Toubro</td><td>27AABCL1234F1Z4</td><td>Mumbai</td><td>Net 60</td><td><span class="tag tag-green">Active</span></td></tr>
+              <tr onclick="showToast('Opening vendor profile…')"><td>VEND-0004</td><td>Ultratech Cement</td><td>27AABCU1234F1Z3</td><td>Mumbai</td><td>Net 30</td><td><span class="tag tag-red">Inactive</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="md-items" class="table-wrap" style="display:none">
+          <table>
+            <thead><tr><th>Item Code</th><th>Description</th><th>UOM</th><th>Rate</th><th>HSN Code</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr onclick="showToast('Opening item details…')"><td>ITM-001</td><td>Steel Rod 16mm</td><td>Unit</td><td class="amount">₹68/kg</td><td>7213</td><td><span class="tag tag-green">Active</span></td></tr>
+              <tr onclick="showToast('Opening item details…')"><td>ITM-002</td><td>Cement Bag 50kg</td><td>Bag</td><td class="amount">₹420</td><td>2523</td><td><span class="tag tag-green">Active</span></td></tr>
+              <tr onclick="showToast('Opening item details…')"><td>ITM-003</td><td>Copper Wire 2.5mm</td><td>Metre</td><td class="amount">₹55/m</td><td>7408</td><td><span class="tag tag-green">Active</span></td></tr>
+              <tr onclick="showToast('Opening item details…')"><td>ITM-004</td><td>PVC Pipe 4 inch</td><td>Piece</td><td class="amount">₹180</td><td>3917</td><td><span class="tag tag-amber">Review</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="md-warehouses" class="table-wrap" style="display:none">
+          <table>
+            <thead><tr><th>Warehouse</th><th>Location</th><th>Capacity</th><th>Used</th><th>Manager</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr onclick="showToast('Opening warehouse details…')"><td>WH-Mumbai-01</td><td>Andheri East, Mumbai</td><td>10,000 sq ft</td><td>72%</td><td>Rajesh Kumar</td><td><span class="tag tag-green">Operational</span></td></tr>
+              <tr onclick="showToast('Opening warehouse details…')"><td>WH-Pune-01</td><td>Hinjewadi, Pune</td><td>8,000 sq ft</td><td>45%</td><td>Priya Shah</td><td><span class="tag tag-green">Operational</span></td></tr>
+              <tr onclick="showToast('Opening warehouse details…')"><td>WH-BLR-01</td><td>Whitefield, Bengaluru</td><td>12,000 sq ft</td><td>88%</td><td>Suresh Nair</td><td><span class="tag tag-amber">Near Full</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /dashboard-page -->
+
+<!-- Blur overlay (security) -->
+<div class="blur-overlay" id="blur-overlay">
+  <svg class="blur-overlay-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+  <h3>Session Locked</h3>
+  <p>The window was inactive. Click to continue.</p>
+  <button class="blur-overlay-btn" onclick="unlockScreen()">Unlock</button>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toast-text"></span>
+</div>
+
+<script>
+// ── SECURITY CONFIG ──────────────────────────────
+const SESSION_TIMEOUT = 15 * 60 * 1000; // 15 min
+const WARN_BEFORE     = 5 * 60 * 1000;  // warn at 5 min left
+const DEMO_USER = { email: 'admin@erp.com', password: 'Admin@123', name: 'Jane Doe', initials: 'JD' };
+
+let sessionTimer, warnTimer, countdownInterval;
+let sessionExpiry;
+let loginAttempts = 0;
+const MAX_ATTEMPTS = 5;
+let lockoutUntil = 0;
+
+// Rate-limit: sanitize inputs
+function sanitize(str) {
+  return String(str).replace(/[<>&"'`]/g, '').trim();
+}
+
+// ── LOGIN ────────────────────────────────────────
+document.getElementById('pw-toggle').addEventListener('click', function() {
+  const pw = document.getElementById('pw-input');
+  if (pw.type === 'password') { pw.type = 'text'; this.textContent = 'Hide'; }
+  else                         { pw.type = 'password'; this.textContent = 'Show'; }
+});
+
+document.getElementById('pw-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+document.getElementById('email-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('pw-input').focus();
+});
+
+document.getElementById('login-btn').addEventListener('click', doLogin);
+
+function showError(msg) {
+  const el = document.getElementById('error-msg');
+  document.getElementById('error-text').textContent = msg;
+  el.style.display = 'block';
+}
+function hideError() { document.getElementById('error-msg').style.display = 'none'; }
+
+function doLogin() {
+  const now = Date.now();
+  if (now < lockoutUntil) {
+    const secs = Math.ceil((lockoutUntil - now) / 1000);
+    showError(`Too many attempts. Try again in ${secs}s.`);
+    return;
+  }
+
+  const email = sanitize(document.getElementById('email-input').value);
+  const pw    = document.getElementById('pw-input').value;
+
+  if (!email || !pw) { showError('Please enter your email and password.'); return; }
+  if (!email.includes('@')) { showError('Enter a valid email address.'); return; }
+
+  const btn = document.getElementById('login-btn');
+  btn.classList.add('loading');
+  hideError();
+
+  // Simulate async auth
+  setTimeout(() => {
+    btn.classList.remove('loading');
+
+    if (email === DEMO_USER.email && pw === DEMO_USER.password) {
+      loginAttempts = 0;
+      enterDashboard(email);
+    } else {
+      loginAttempts++;
+      if (loginAttempts >= MAX_ATTEMPTS) {
+        lockoutUntil = Date.now() + 30000;
+        loginAttempts = 0;
+        showError('Account locked for 30 seconds due to too many attempts.');
+      } else {
+        showError(`Invalid credentials. ${MAX_ATTEMPTS - loginAttempts} attempt(s) remaining.`);
+      }
+      document.getElementById('pw-input').value = '';
+    }
+  }, 900);
+}
+
+function enterDashboard(email) {
+  document.getElementById('login-page').style.display = 'none';
+  document.getElementById('dashboard-page').style.display = 'block';
+  updateClock();
+  setInterval(updateClock, 1000);
+  updateWelcome();
+  resetSession();
+}
+
+// ── SESSION MANAGEMENT ───────────────────────────
+function resetSession() {
+  clearTimeout(sessionTimer);
+  clearTimeout(warnTimer);
+  clearInterval(countdownInterval);
+  document.getElementById('session-warn').classList.remove('show');
+
+  sessionExpiry = Date.now() + SESSION_TIMEOUT;
+
+  warnTimer = setTimeout(() => {
+    document.getElementById('session-warn').classList.add('show');
+    let remaining = Math.floor(WARN_BEFORE / 1000);
+    updateCountdown(remaining);
+    countdownInterval = setInterval(() => {
+      remaining--;
+      updateCountdown(remaining);
+      if (remaining <= 0) { clearInterval(countdownInterval); logout(); }
+    }, 1000);
+  }, SESSION_TIMEOUT - WARN_BEFORE);
+
+  sessionTimer = setTimeout(logout, SESSION_TIMEOUT);
+}
+
+function updateCountdown(secs) {
+  const m = Math.floor(secs / 60).toString().padStart(2,'0');
+  const s = (secs % 60).toString().padStart(2,'0');
+  document.getElementById('session-countdown').textContent = `${m}:${s}`;
+}
+
+// Reset session on user activity
+['click','keydown','mousemove','touchstart'].forEach(e =>
+  document.addEventListener(e, () => {
+    if (document.getElementById('dashboard-page').style.display !== 'none') resetSession();
+  }, { passive: true })
+);
+
+// ── SCREEN LOCK ON VISIBILITY CHANGE ────────────
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden && document.getElementById('dashboard-page').style.display !== 'none') {
+    document.getElementById('blur-overlay').classList.add('show');
+  }
+});
+
+function unlockScreen() {
+  document.getElementById('blur-overlay').classList.remove('show');
+  resetSession();
+}
+
+// ── LOGOUT ───────────────────────────────────────
+function logout() {
+  clearTimeout(sessionTimer);
+  clearTimeout(warnTimer);
+  clearInterval(countdownInterval);
+
+  document.getElementById('dashboard-page').style.display = 'none';
+  document.getElementById('login-page').style.display = 'flex';
+  document.getElementById('email-input').value = '';
+  document.getElementById('pw-input').value = '';
+  document.getElementById('pw-input').type = 'password';
+  document.getElementById('pw-toggle').textContent = 'Show';
+  document.getElementById('blur-overlay').classList.remove('show');
+  document.getElementById('session-warn').classList.remove('show');
+  hideError();
+}
+
+// ── NAVIGATION ───────────────────────────────────
+const titles = {
+  home: 'Dashboard', so: 'Sales Orders',
+  po: 'Purchase Orders', inv: 'Inventory', md: 'Master Data'
+};
+
+function switchPanel(id, el) {
+  document.querySelectorAll('.module-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(id + '-panel').classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.getElementById('topbar-title').textContent = titles[id] || id;
+}
+
+function switchMasterTab(tab, el) {
+  ['customers','vendors','items','warehouses'].forEach(t => {
+    document.getElementById('md-' + t).style.display = 'none';
+  });
+  document.getElementById('md-' + tab).style.display = 'block';
+  document.querySelectorAll('.master-tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+}
+
+// ── SEARCH ───────────────────────────────────────
+function filterTable(tableId, query) {
+  const q = query.toLowerCase();
+  document.querySelectorAll('#' + tableId + ' tbody tr').forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+// ── CLOCK & WELCOME ──────────────────────────────
+function updateClock() {
+  const now = new Date();
+  document.getElementById('topbar-time').textContent =
+    now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+}
+
+function updateWelcome() {
+  const h = new Date().getHours();
+  const greet = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('welcome-msg').textContent = `${greet}, Jane 👋`;
+  document.getElementById('today-date').textContent =
+    new Date().toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+}
+
+// ── TOAST ────────────────────────────────────────
+let toastTimeout;
+function showToast(msg) {
+  clearTimeout(toastTimeout);
+  document.getElementById('toast-text').textContent = msg;
+  document.getElementById('toast').classList.add('show');
+  toastTimeout = setTimeout(() => document.getElementById('toast').classList.remove('show'), 2500);
+}
+
+// ── DISABLE RIGHT-CLICK ON SENSITIVE DATA ────────
+document.addEventListener('contextmenu', e => {
+  if (document.getElementById('dashboard-page').style.display !== 'none') {
+    e.preventDefault();
+  }
+});
+</script>
+</body>
+</html>
